@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Image {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +22,5 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)  // 外键，指向 Post
     private Post post;
-
-    // 其他字段和 Getter/Setter
 }
 

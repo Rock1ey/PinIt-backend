@@ -1,5 +1,7 @@
 package org.leye.maven.pinitbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +25,14 @@ public class Post {
     private String title; // 帖子标题
     private String description; // 帖子描述
     // private String location;
-    private Long userId; // 发布者id
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") // 外键
+    @JsonManagedReference
+    private User user; // 发布者
+
+    @ManyToMany(mappedBy = "favoritePosts")  // 指定反向关系
+    private List<User> usersWhoFavorited;  // 收藏该帖子的用户
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();  // 一对多关系，Post 包含多个 Image
