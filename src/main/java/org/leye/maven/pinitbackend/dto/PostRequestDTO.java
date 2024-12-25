@@ -11,9 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Getter
 public class PostRequestDTO {
+    private Long id;
     private String title;
     private String description;
     private Long userId;
+    private Double latitude;
+    private Double longitude;
     private MultipartFile[] files;
 }
 

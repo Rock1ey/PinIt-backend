@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,14 @@ public class Post {
     @JsonManagedReference
     private User user; // 发布者
 
-    @ManyToMany(mappedBy = "favoritePosts")  // 指定反向关系
-    private List<User> usersWhoFavorited;  // 收藏该帖子的用户
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Favorite> favorites;  // 帖子被哪些用户收藏
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();  // 一对多关系，Post 包含多个 Image
+
+    @Embedded
+    private Location location;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

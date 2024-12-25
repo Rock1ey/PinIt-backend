@@ -30,11 +30,6 @@ public class User {
     @JsonBackReference
     private List<Post> posts; // 用户发布的帖子
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_post_favorites", // 关联表的名字
-            joinColumns = @JoinColumn(name = "user_id"), // 用户外键
-            inverseJoinColumns = @JoinColumn(name = "post_id") // 帖子外键
-    )
-    private List<Post> favoritePosts; // 用户收藏的帖子
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Favorite> favorites;  // 用户的收藏记录
 }
