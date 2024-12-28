@@ -10,16 +10,15 @@ import org.leye.maven.pinitbackend.model.User;
 import org.leye.maven.pinitbackend.repository.ImageRepository;
 import org.leye.maven.pinitbackend.repository.PostRepository;
 import org.leye.maven.pinitbackend.repository.UserRepository;
+import org.leye.maven.pinitbackend.service.OssService;
 import org.leye.maven.pinitbackend.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -44,7 +43,7 @@ public class PostServiceImpl implements PostService {
     private UserRepository userRepository;
 
     @Autowired
-    private OssServiceImpl ossServiceImpl; // 用于上传图片到 OSS
+    private OssService ossService; // 用于上传图片到 OSS
 
     @Override
     public PostDTO createPost(PostRequestDTO postRequest) {
@@ -103,7 +102,7 @@ public class PostServiceImpl implements PostService {
             // 清除旧的图片，依据实际需求决定是否需要先删除
             for (Image image : post.getImages()) {
                 imageRepository.delete(image);
-                ossServiceImpl.deleteFile(image.getImageUrl());
+                ossService.deleteFile(image.getImageUrl());
             }
 
             // 上传新的图片并保存图片 URL
@@ -118,7 +117,7 @@ public class PostServiceImpl implements PostService {
         for (MultipartFile file : postRequest.getFiles()) {
             // 生成上传文件名（使用 UUID 或其他方式）
             String objectName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-            String imageUrl = ossServiceImpl.uploadFile(file.getOriginalFilename(), objectName);
+            String imageUrl = ossService.uploadFile(file.getOriginalFilename(), objectName);
 
             // 创建新图片实体
             Image image = new Image();

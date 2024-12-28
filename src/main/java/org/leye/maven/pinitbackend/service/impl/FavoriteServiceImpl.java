@@ -1,5 +1,7 @@
 package org.leye.maven.pinitbackend.service.impl;
 
+import org.leye.maven.pinitbackend.dto.PostDTO;
+import org.leye.maven.pinitbackend.mapper.PostMapper;
 import org.leye.maven.pinitbackend.model.Favorite;
 import org.leye.maven.pinitbackend.model.Post;
 import org.leye.maven.pinitbackend.model.User;
@@ -30,6 +32,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private PostMapper postMapper;
+
     // 添加收藏
     @Override
     public void addFavorite(Long userId, Long postId) {
@@ -58,10 +63,10 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     // 获取用户的所有收藏
     @Override
-    public List<Post> getUserFavorites(Long userId) {
+    public List<PostDTO> getUserFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findByUserId(userId);
-        return favorites.stream().map(Favorite::getPost).collect(Collectors.toList());
+        List<Post> posts = favorites.stream().map(Favorite::getPost).toList();
+        return posts.stream().map(post -> postMapper.toDTO(post)).collect(Collectors.toList());
     }
-
 
 }

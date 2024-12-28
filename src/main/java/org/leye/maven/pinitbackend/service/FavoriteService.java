@@ -1,5 +1,6 @@
 package org.leye.maven.pinitbackend.service;
 
+import org.leye.maven.pinitbackend.dto.PostDTO;
 import org.leye.maven.pinitbackend.model.Favorite;
 import org.leye.maven.pinitbackend.model.Post;
 
@@ -14,5 +15,5 @@ import java.util.List;
 public interface FavoriteService {
     public void addFavorite(Long userId, Long postId);
     public void removeFavorite(Long userId, Long postId);
-    public List<Post> getUserFavorites(Long userId);
+    public List<PostDTO> getUserFavorites(Long userId);
 }

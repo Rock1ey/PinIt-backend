@@ -1,10 +1,11 @@
 package org.leye.maven.pinitbackend.controller;
 
+import org.leye.maven.pinitbackend.dto.LoginRequestDTO;
 import org.leye.maven.pinitbackend.dto.UserDTO;
-import org.leye.maven.pinitbackend.dto.UserRequestDTO;
-import org.leye.maven.pinitbackend.model.User;
+import org.leye.maven.pinitbackend.dto.UserRegistrationDTO;
+import org.leye.maven.pinitbackend.dto.UserUpdateRequestDTO;
 import org.leye.maven.pinitbackend.repository.UserRepository;
-import org.leye.maven.pinitbackend.service.impl.UserServiceImpl;
+import org.leye.maven.pinitbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +20,48 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService userService;
 
     @Autowired
     UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> create(@RequestBody UserRequestDTO userRequestDTO) {
-        User user = userServiceImpl.createUser(userRequestDTO);
-        return ResponseEntity.ok(userServiceImpl.getUser(user));
+    public ResponseEntity<UserDTO> create(@RequestBody UserRegistrationDTO userRegistration) {
+        try {
+            UserDTO user = userService.registerUser(userRegistration);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return ResponseEntity.ok(userServiceImpl.getUser(user));
+        try {
+            UserDTO user = userService.findUserById(id);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequestDTO userUpdateRequest) {
+        try {
+            UserDTO user = userService.updateUser(userUpdateRequest);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> userLogin(@RequestBody LoginRequestDTO loginRequest) {
+        try {
+            UserDTO user = userService.userLogin(loginRequest);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

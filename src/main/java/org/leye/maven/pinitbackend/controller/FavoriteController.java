@@ -1,5 +1,6 @@
 package org.leye.maven.pinitbackend.controller;
 
+import org.leye.maven.pinitbackend.dto.PostDTO;
 import org.leye.maven.pinitbackend.model.Post;
 import org.leye.maven.pinitbackend.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class FavoriteController {
 
     // 获取用户收藏的所有帖子
     @GetMapping("/user/{userId}")
-    public List<Post> getUserFavorites(@PathVariable Long userId) {
+    public List<PostDTO> getUserFavorites(@PathVariable Long userId) {
         return favoriteService.getUserFavorites(userId);
     }
 

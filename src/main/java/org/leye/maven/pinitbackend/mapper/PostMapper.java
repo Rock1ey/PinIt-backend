@@ -25,7 +25,7 @@ public class PostMapper {
                 .map(Image::getImageUrl)
                 .collect(Collectors.toList()));
         postDTO.setUserid(post.getUser().getId());
-        postDTO.setNickname(post.getUser().getNickname());
+        postDTO.setUsername(post.getUser().getUsername());
         postDTO.setAvatarUrl(post.getUser().getAvatar());
         postDTO.setLatitude(post.getLocation().getLatitude());
         postDTO.setLongitude(post.getLocation().getLongitude());

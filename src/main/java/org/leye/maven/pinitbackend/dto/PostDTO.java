@@ -18,7 +18,7 @@ public class PostDTO {
     private List<String> imageUrls;  // 存储图片的 URL
     // 发布者相关数据（在帖子页仅展示昵称和头像）
     private Long userid;
-    private String nickname;
+    private String username;
     private String avatarUrl;
     // 位置数据
     private Double latitude;

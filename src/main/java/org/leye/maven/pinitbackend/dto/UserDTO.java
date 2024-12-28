@@ -1,5 +1,6 @@
 package org.leye.maven.pinitbackend.dto;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -9,9 +10,10 @@ import lombok.Setter;
  * @date 2024/12/24 10:01
  */
 @Setter
+@Getter
 public class UserDTO {
     private Long id;
-    private String nickname;
+    private String username;
     // private String password;
     private String bio;
     private String avatar;

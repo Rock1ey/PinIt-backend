@@ -25,7 +25,6 @@ public class Post {
     private Long id;
     private String title; // 帖子标题
     private String description; // 帖子描述
-    // private String location;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id") // 外键
