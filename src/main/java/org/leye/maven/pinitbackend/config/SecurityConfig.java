@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/user/register").permitAll() // 公开路径
+                                .requestMatchers("/**").permitAll() // 公开路径
                                 .anyRequest().authenticated()            // 其他路径需要认证
                 );
         http.cors(Customizer.withDefaults());
