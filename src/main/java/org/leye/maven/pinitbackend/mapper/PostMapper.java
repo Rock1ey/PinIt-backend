@@ -7,12 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 用于将 Post 实体映射为 DTO
- * @date 2024/12/25 21:28
- */
+// 将Post实体类映射为DTO类
 @Component
 public class PostMapper {
 

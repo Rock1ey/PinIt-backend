@@ -10,12 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: Post实体类，存储用户发布的帖子信息
- * @date 2024/12/23 21:56
- */
 @Getter
 @Setter
 @Entity
@@ -26,7 +20,7 @@ public class Post {
     private String title; // 帖子标题
     private String description; // 帖子描述
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id") // 外键
     @JsonManagedReference
     private User user; // 发布者

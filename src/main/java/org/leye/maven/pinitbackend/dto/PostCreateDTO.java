@@ -1,17 +1,17 @@
 package org.leye.maven.pinitbackend.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-// 封装更新帖子的请求数据
+// 用于创建新帖子时传入数据
 @Getter
-public class PostRequestDTO {
-    private Long id;
+@Setter
+public class PostCreateDTO {
     private String title;
     private String description;
     private Long userId;
     private Double latitude;
     private Double longitude;
-    private MultipartFile[] files;
+    private MultipartFile[] images;
 }
-

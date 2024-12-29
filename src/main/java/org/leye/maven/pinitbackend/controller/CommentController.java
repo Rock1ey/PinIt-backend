@@ -10,15 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/26 21:51
- */
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
+
     @Autowired
     private CommentService commentService;
 
@@ -38,4 +33,5 @@ public class CommentController {
         List<CommentDTO> comments = commentService.getComments(postId);
         return ResponseEntity.ok(comments);
     }
+
 }

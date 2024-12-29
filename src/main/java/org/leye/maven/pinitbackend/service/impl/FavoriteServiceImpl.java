@@ -15,12 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/24 22:05
- */
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
@@ -67,6 +61,12 @@ public class FavoriteServiceImpl implements FavoriteService {
         List<Favorite> favorites = favoriteRepository.findByUserId(userId);
         List<Post> posts = favorites.stream().map(Favorite::getPost).toList();
         return posts.stream().map(post -> postMapper.toDTO(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkFavorite(Long userId, Long postId) {
+        Favorite favorite = favoriteRepository.findByPostIdAndUserId(postId, userId);
+        return favorite != null;
     }
 
 }

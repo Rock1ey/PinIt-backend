@@ -4,12 +4,7 @@ import org.leye.maven.pinitbackend.dto.CommentDTO;
 import org.leye.maven.pinitbackend.model.Comment;
 import org.springframework.stereotype.Component;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/26 21:31
- */
+// 将Comment实体类映射为DTO类
 @Component
 public class CommentMapper {
 

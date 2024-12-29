@@ -7,27 +7,22 @@ import org.leye.maven.pinitbackend.dto.UserUpdateRequestDTO;
 import org.leye.maven.pinitbackend.mapper.UserMapper;
 import org.leye.maven.pinitbackend.model.User;
 import org.leye.maven.pinitbackend.repository.UserRepository;
+import org.leye.maven.pinitbackend.service.OssService;
 import org.leye.maven.pinitbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.UUID;
+import java.io.IOException;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 业务逻辑层，处理用户登录、注册等
- * @date 2024/12/24 10:04
- */
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private OssServiceImpl ossServiceImpl; // 用于上传头像到 OSS
+    private OssService ossService; // 用于上传头像到 OSS
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -45,13 +40,6 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(registrationDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-        // user.setBio(registrationDTO.getBio());
-
-//        MultipartFile avatar = registrationDTO.getAvatar();
-//        String objectName = UUID.randomUUID().toString() + "-" + avatar.getOriginalFilename();
-//        String avatarUrl = ossServiceImpl.uploadFile(avatar.getOriginalFilename(), objectName);
-//
-//        user.setAvatar(avatarUrl);
 
         userRepository.save(user);
 
@@ -75,12 +63,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setBio(userUpdateRequest.getBio());
         user.setUsername(userUpdateRequest.getUsername());
-
-        MultipartFile avatar = userUpdateRequest.getAvatar();
-        String objectName = UUID.randomUUID().toString() + "-" + avatar.getOriginalFilename();
-        String avatarUrl = ossServiceImpl.uploadFile(avatar.getOriginalFilename(), objectName);
-        user.setAvatar(avatarUrl);
-
+        userRepository.save(user);
         return userMapper.toUserDTO(user);
     }
 
@@ -92,6 +75,18 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Invalid username or password");
         }
         return userMapper.toUserDTO(user);
+    }
+
+    @Override
+    public String uploadAvatar(Long id, MultipartFile file) throws IOException {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        String newAvatar = ossService.uploadImage(file);
+        user.setAvatar(newAvatar);
+        userRepository.save(user); // 更新头像信息
+        return newAvatar;
     }
 
 }

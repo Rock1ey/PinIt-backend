@@ -5,12 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/24 22:03
- */
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     // 查找某个用户的所有收藏帖子

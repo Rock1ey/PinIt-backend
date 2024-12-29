@@ -6,14 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
-/**
- * @author leye
- * @description: 使用 JpaRepository 来访问数据库
- * @date 2024/12/23 21:57
- * @version 1.0
- */
+// JpaRepository 来访问数据库，自带查询方法，也可自定义
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByTitleContaining(String title);
     List<Post> findByUserId(Long userId);

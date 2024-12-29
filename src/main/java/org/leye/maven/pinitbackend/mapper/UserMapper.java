@@ -4,12 +4,7 @@ import org.leye.maven.pinitbackend.dto.UserDTO;
 import org.leye.maven.pinitbackend.model.User;
 import org.springframework.stereotype.Component;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/26 23:18
- */
+// 将User实体类映射为DTO类
 @Component
 public class UserMapper {
 

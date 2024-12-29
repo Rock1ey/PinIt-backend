@@ -4,16 +4,14 @@ import org.leye.maven.pinitbackend.dto.LoginRequestDTO;
 import org.leye.maven.pinitbackend.dto.UserDTO;
 import org.leye.maven.pinitbackend.dto.UserRegistrationDTO;
 import org.leye.maven.pinitbackend.dto.UserUpdateRequestDTO;
+import org.springframework.web.multipart.MultipartFile;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/24 19:24
- */
+import java.io.IOException;
+
 public interface UserService {
     public UserDTO registerUser(UserRegistrationDTO registrationDTO);
     public UserDTO findUserById(Long id);
     public UserDTO updateUser(UserUpdateRequestDTO userUpdateRequestD);
     public UserDTO userLogin(LoginRequestDTO loginRequest);
+    public String uploadAvatar(Long id, MultipartFile file) throws IOException;
 }

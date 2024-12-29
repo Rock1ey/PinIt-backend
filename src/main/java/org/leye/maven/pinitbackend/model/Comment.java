@@ -5,14 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/26 21:12
- */
 @Getter
 @Setter
 @Entity

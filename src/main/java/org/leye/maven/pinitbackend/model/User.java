@@ -7,12 +7,6 @@ import lombok.Setter;
 
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 用户实体类
- * @date 2024/12/24 04:27
- */
 @Getter
 @Setter
 @Entity
@@ -22,7 +16,6 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    // private String email;
     private String bio;
     private String avatar;
 

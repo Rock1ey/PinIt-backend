@@ -1,7 +1,6 @@
 package org.leye.maven.pinitbackend.controller;
 
 import org.leye.maven.pinitbackend.dto.PostDTO;
-import org.leye.maven.pinitbackend.model.Post;
 import org.leye.maven.pinitbackend.service.FavoriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/24 22:09
- */
 @RestController
 @RequestMapping("/api/favorites")
 public class FavoriteController {
@@ -40,6 +33,12 @@ public class FavoriteController {
     @GetMapping("/user/{userId}")
     public List<PostDTO> getUserFavorites(@PathVariable Long userId) {
         return favoriteService.getUserFavorites(userId);
+    }
+
+    // 判断用户是否收藏帖子
+    @PostMapping("/check")
+    public boolean checkFavorite(@RequestParam Long userId, @RequestParam Long postId) {
+        return favoriteService.checkFavorite(userId,postId);
     }
 
 }

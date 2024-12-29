@@ -14,12 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/26 21:36
- */
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired

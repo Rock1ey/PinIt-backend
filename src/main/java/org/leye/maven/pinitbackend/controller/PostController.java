@@ -1,51 +1,54 @@
 package org.leye.maven.pinitbackend.controller;
 
-import jakarta.persistence.PostUpdate;
-import org.hibernate.annotations.DynamicUpdate;
+import org.leye.maven.pinitbackend.dto.PostCreateDTO;
 import org.leye.maven.pinitbackend.dto.PostDTO;
 import org.leye.maven.pinitbackend.dto.PostRequestDTO;
-import org.leye.maven.pinitbackend.mapper.PostMapper;
-import org.leye.maven.pinitbackend.model.Post;
-import org.leye.maven.pinitbackend.repository.PostRepository;
 import org.leye.maven.pinitbackend.service.PostService;
-import org.leye.maven.pinitbackend.service.impl.OssServiceImpl;
-import org.leye.maven.pinitbackend.service.impl.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 编写API控制器，给前端提供接口
- * @date 2024/12/23 21:59
- */
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
+
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private PostRepository postRepository;
+//    @PostMapping
+//    public ResponseEntity<PostDTO> createPost(@RequestBody PostCreateDTO postRequest) throws IOException {
+//        PostDTO post = postService.createPost(postRequest);
+//        return ResponseEntity.ok(post);
+//    }
 
-    @Autowired
-    private PostMapper postMapper;
-
-    @Autowired
-    private OssServiceImpl ossServiceImpl;  // 使用 OSS 上传图片的服务
-
+    // 创建新帖子并上传
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostRequestDTO postRequest) throws IOException {
-        PostDTO post = postService.createPost(postRequest);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<String> createPost(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("userId") Long userId,
+            @RequestParam("latitude") Double latitude,
+            @RequestParam("longitude") Double longitude,
+            @RequestParam("images") MultipartFile[] images) throws IOException {
+
+        PostCreateDTO postRequest = new PostCreateDTO();
+        postRequest.setTitle(title);
+        postRequest.setDescription(description);
+        postRequest.setUserId(userId);
+        postRequest.setLatitude(latitude);
+        postRequest.setLongitude(longitude);
+        postRequest.setImages(images);
+
+        // PostDTO post = postService.createPost(postRequest);
+        return ResponseEntity.ok(postService.createPost(postRequest));
     }
 
+    // 获取所有帖子
     @GetMapping
     public List<PostDTO> getAllPosts() {
         return postService.getAllPosts();
@@ -57,6 +60,7 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    // 获取某个用户的所有帖子
     @GetMapping("/user/{userId}")
     public List<PostDTO> getPostsByUserId(@PathVariable Long userId) {
         return postService.getPostsByUserId(userId);
@@ -72,6 +76,7 @@ public class PostController {
         postService.updatePost(postRequest);
     }
 
+    // 根据标题搜索
     @GetMapping("/search")
     public List<PostDTO> searchPostsByTitle(@Param("title") String title) {
         return postService.searchPostsByTitle(title);

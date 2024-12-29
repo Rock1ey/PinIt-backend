@@ -1,15 +1,12 @@
 package org.leye.maven.pinitbackend.dto;
 
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 供前端展示 Post 的各数据
- * @date 2024/12/24 04:04
- */
+// 供前端展示 Post 的各数据
+@Getter
 @Setter
 public class PostDTO {
     private Long id;

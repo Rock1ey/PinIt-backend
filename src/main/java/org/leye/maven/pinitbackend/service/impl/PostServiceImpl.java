@@ -1,5 +1,6 @@
 package org.leye.maven.pinitbackend.service.impl;
 
+import org.leye.maven.pinitbackend.dto.PostCreateDTO;
 import org.leye.maven.pinitbackend.dto.PostDTO;
 import org.leye.maven.pinitbackend.dto.PostRequestDTO;
 import org.leye.maven.pinitbackend.mapper.PostMapper;
@@ -17,17 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 业务逻辑层，处理帖子的创建、查询等
- * @date 2024/12/23 21:59
- */
+// Post 相关业务逻辑的实现
 @Service
 public class PostServiceImpl implements PostService {
     @Autowired
@@ -46,7 +42,7 @@ public class PostServiceImpl implements PostService {
     private OssService ossService; // 用于上传图片到 OSS
 
     @Override
-    public PostDTO createPost(PostRequestDTO postRequest) {
+    public String createPost(PostCreateDTO postRequest) throws IOException {
         User user = userRepository.findById(postRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         // 创建 Post 实体
@@ -57,10 +53,16 @@ public class PostServiceImpl implements PostService {
         post.setLocation(new Location(postRequest.getLatitude(), postRequest.getLongitude()));
         postRepository.save(post);
 
-        // 上传图片到 OSS 并保存图片 URL
-        saveImages(postRequest, post);
+        MultipartFile[] files = postRequest.getImages();
+        for (MultipartFile file : files) {
+            String imageUrl = ossService.uploadImage(file);
+            Image image = new Image();
+            image.setImageUrl(imageUrl);
+            image.setPost(post);
+            imageRepository.save(image);
+        }
 
-        return postMapper.toDTO(post);
+        return "create success";
     }
 
     @Override
@@ -68,7 +70,8 @@ public class PostServiceImpl implements PostService {
         List<Post> posts = postRepository.findAll();
         List<PostDTO> postDTOs = new ArrayList<>();
         for (Post post : posts) {
-            PostDTO postDTO = new PostDTO();
+            PostDTO postDTO = postMapper.toDTO(post);
+            postDTOs.add(postDTO);
         }
         return postDTOs;
     }
@@ -78,6 +81,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return postMapper.toDTO(post);
+        // return post;
     }
 
     @Override
@@ -105,28 +109,12 @@ public class PostServiceImpl implements PostService {
                 ossService.deleteFile(image.getImageUrl());
             }
 
-            // 上传新的图片并保存图片 URL
-            saveImages(postRequest, post);
+//            // 上传新的图片并保存图片 URL
+//            saveImages(postRequest, post);
         }
 
         // 更新帖子
         postRepository.save(post);  // 保存更新后的帖子
-    }
-
-    private void saveImages(PostRequestDTO postRequest, Post post) {
-        for (MultipartFile file : postRequest.getFiles()) {
-            // 生成上传文件名（使用 UUID 或其他方式）
-            String objectName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-            String imageUrl = ossService.uploadFile(file.getOriginalFilename(), objectName);
-
-            // 创建新图片实体
-            Image image = new Image();
-            image.setImageUrl(imageUrl);
-            image.setPost(post);  // 将图片关联到当前的 Post
-
-            // 保存新图片
-            imageRepository.save(image);
-        }
     }
 
     @Override

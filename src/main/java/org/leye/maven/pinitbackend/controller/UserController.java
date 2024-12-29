@@ -4,27 +4,22 @@ import org.leye.maven.pinitbackend.dto.LoginRequestDTO;
 import org.leye.maven.pinitbackend.dto.UserDTO;
 import org.leye.maven.pinitbackend.dto.UserRegistrationDTO;
 import org.leye.maven.pinitbackend.dto.UserUpdateRequestDTO;
-import org.leye.maven.pinitbackend.repository.UserRepository;
 import org.leye.maven.pinitbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-/**
- * @author leye
- * @version 1.0
- * @description: 给前端提供用户有关接口
- * @date 2024/12/24 10:40
- */
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
     @Autowired
     UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
-
+    // 创建新账号
     @PostMapping("/register")
     public ResponseEntity<UserDTO> create(@RequestBody UserRegistrationDTO userRegistration) {
         try {
@@ -55,6 +50,7 @@ public class UserController {
         }
     }
 
+    // 用户登录
     @PostMapping("/login")
     public ResponseEntity<UserDTO> userLogin(@RequestBody LoginRequestDTO loginRequest) {
         try {
@@ -64,4 +60,12 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    // 上传头像
+    @PostMapping("/upload-avatar")
+    public ResponseEntity<String> uploadAvatar(@RequestParam("id") Long id, @RequestParam("avatar") MultipartFile file) throws IOException {
+        String avatar = userService.uploadAvatar(id,file);
+        return ResponseEntity.ok(avatar);
+    }
+
 }

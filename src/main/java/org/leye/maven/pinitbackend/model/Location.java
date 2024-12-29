@@ -4,12 +4,6 @@ import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author leye
- * @version 1.0
- * @description: TODO
- * @date 2024/12/25 22:25
- */
 @Getter
 @Setter
 @Embeddable
@@ -25,5 +19,5 @@ public class Location {
     public Location() {
 
     }
-    // Getters and Setters
+
 }
